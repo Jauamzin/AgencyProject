@@ -1,0 +1,144 @@
+<app-page-hero image="images/graduation.jpg" eyebrow="University & exchange programs" height="80vh">
+  <h1 class="display">Choose your<br /><em>adventure.</em></h1>
+  <p class="hero-sub">From a single semester to a full degree — every program comes with the Geenie safety net.</p>
+</app-page-hero>
+
+<section class="section">
+  <div class="container">
+    <div class="filters" appReveal>
+      <div class="filters__cats" role="tablist" aria-label="Program category">
+        @for (c of categories; track c) {
+          <button type="button" class="chip" role="tab" [class.is-active]="category() === c" [attr.aria-selected]="category() === c" (click)="category.set(c)">{{ c }}</button>
+        }
+      </div>
+      <label class="filters__city">
+        <app-icon name="pin" [size]="18" />
+        <select class="select" [ngModel]="cityFilter()" (ngModelChange)="cityFilter.set($event)" aria-label="City">
+          <option value="all">All cities</option>
+          @for (c of data.cities; track c.slug) { <option [value]="c.slug">{{ c.name }}</option> }
+        </select>
+      </label>
+    </div>
+
+    <p class="count muted">{{ filtered().length }} program{{ filtered().length === 1 ? '' : 's' }} found</p>
+
+    <div class="programs">
+      @for (p of filtered(); track p.id; let i = $index) {
+        <article class="program" [id]="p.id">
+          <div class="program__img parallax-frame">
+            <img class="parallax-img" [src]="p.image" [alt]="p.title" loading="lazy" appParallax="0.1" />
+            <span class="chip program__cat">{{ p.category }}</span>
+          </div>
+          <div class="program__body">
+            <h2 class="h3">{{ p.title }}</h2>
+            <p class="muted">{{ p.summary }}</p>
+            <dl class="program__meta">
+              <div><dt><app-icon name="clock" [size]="16" /> Duration</dt><dd>{{ p.duration }}</dd></div>
+              <div><dt><app-icon name="book" [size]="16" /> Intakes</dt><dd>{{ p.intake }}</dd></div>
+              <div><dt><app-icon name="pin" [size]="16" /> Cities</dt>
+                <dd>@for (c of p.cities; track c; let last = $last) {<a [routerLink]="['/cities', c]">{{ data.cityName(c) }}</a>{{ last ? '' : ' · ' }}}</dd></div>
+              <div><dt><app-icon name="briefcase" [size]="16" /> Work rights</dt><dd>{{ p.workRights }}</dd></div>
+            </dl>
+            <ul class="list-check">
+              @for (inc of p.includes; track inc) { <li><app-icon name="check" [size]="16" />{{ inc }}</li> }
+            </ul>
+            <div class="program__foot">
+              <span class="price"><small>from</small>{{ p.fromPrice | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</span>
+              <div class="program__ctas">
+                <button type="button" class="btn btn--ghost" (click)="pickForCalc(p)">Estimate budget</button>
+                <a routerLink="/make-a-wish" [queryParams]="{ program: p.id }" class="btn btn--primary">I want this <app-icon name="arrow" [size]="16" /></a>
+              </div>
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty">
+          <app-icon name="lamp" [size]="48" [stroke]="1.2" />
+          <p>No programs match that wish yet. <button type="button" class="linkish" (click)="category.set('All'); cityFilter.set('all')">Reset filters</button></p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ WISH CALCULATOR ============ -->
+<section class="section section--dark calc" id="calculator">
+  <div class="calc__bg parallax-frame" aria-hidden="true"><img class="parallax-img" src="images/dream-stars.jpg" alt="" loading="lazy" appParallax="0.2" /></div>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>The wish calculator</span>
+        <h2 class="h2" appReveal="80">How much does your <em class="aurora-text">dream</em> cost?</h2>
+      </div>
+      <p class="lead" appReveal="160">Move the sliders and watch the magic. A rough estimate to help you plan — your advisor will fine-tune it.</p>
+    </div>
+
+    <div class="calc__grid">
+      <form class="calc__form" (submit)="$event.preventDefault()">
+        <div class="field">
+          <label for="c-city">City</label>
+          <div class="seg">
+            @for (c of data.cities; track c.slug) {
+              <button type="button" [class.is-on]="calcCity() === c.slug" (click)="calcCity.set(c.slug)" [style.--c]="c.color">{{ c.name }}</button>
+            }
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-program">Program</label>
+          <select id="c-program" class="select" [ngModel]="calcProgram()" (ngModelChange)="calcProgram.set($event)" name="program">
+            @for (p of data.programs; track p.id) { <option [value]="p.id">{{ p.title }}</option> }
+          </select>
+        </div>
+        <div class="field">
+          <label for="c-months">Months in Canada: <strong>{{ months() }}</strong></label>
+          <input id="c-months" type="range" min="1" max="24" [ngModel]="months()" (ngModelChange)="months.set(+$event)" name="months" />
+        </div>
+        <div class="field">
+          <label>Housing</label>
+          <div class="seg">
+            @for (a of estimate().city.accommodation; track a.type; let i = $index) {
+              <button type="button" [class.is-on]="housing() === i" (click)="housing.set(i)">{{ a.type }}</button>
+            }
+          </div>
+        </div>
+        <div class="field">
+          <label>Lifestyle</label>
+          <div class="seg">
+            @for (l of lifestyles; track l.v) {
+              <button type="button" [class.is-on]="lifestyle() === l.v" (click)="lifestyle.set(l.v)">{{ l.label }}</button>
+            }
+          </div>
+        </div>
+      </form>
+
+      <div class="calc__result" aria-live="polite">
+        <span class="calc__label">Estimated total investment</span>
+        <strong class="calc__total">{{ estimate().total | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong>
+        <span class="muted">≈ {{ estimate().monthly | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }} / month living costs in {{ estimate().city.name }}</span>
+
+        <div class="stack" role="img" [attr.aria-label]="'Living ' + (estimate().living | currency: 'CAD' : 'symbol-narrow' : '1.0-0') + ', tuition ' + (estimate().tuition | currency: 'CAD' : 'symbol-narrow' : '1.0-0') + ', flights and insurance ' + (estimate().extras | currency: 'CAD' : 'symbol-narrow' : '1.0-0')">
+          @for (b of estimate().bars; track b.label) {
+            <span [style.width.%]="pct(b.value)" [style.background]="b.color" [title]="b.label"></span>
+          }
+        </div>
+        <ul class="legend">
+          @for (b of estimate().bars; track b.label) {
+            <li><i [style.background]="b.color"></i>{{ b.label }}<strong>{{ b.value | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></li>
+          }
+        </ul>
+
+        <div class="calc__notes">
+          @if (estimate().needsPermit) {
+            <p><app-icon name="shield" [size]="18" /> Stays over 6 months need a <strong>study permit</strong>. Plan to show about <strong>{{ estimate().proofOfFunds | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong> in proof of funds for year one.</p>
+          } @else {
+            <p><app-icon name="plane" [size]="18" /> Under 6 months — you can usually study as a <strong>visitor (eTA/TRV)</strong>.</p>
+          }
+          @if (estimate().work > 0) {
+            <p><app-icon name="briefcase" [size]="18" /> A 20h/week part-time job could offset around <strong>{{ estimate().work | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong> after tax.</p>
+          }
+        </div>
+        <a routerLink="/make-a-wish" class="btn btn--aurora">Get my personalised plan <app-icon name="sparkle" [size]="18" /></a>
+      </div>
+    </div>
+  </div>
+</section>

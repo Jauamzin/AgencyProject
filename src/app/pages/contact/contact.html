@@ -1,0 +1,119 @@
+<section class="wish">
+  <aside class="wish__visual parallax-frame">
+    <img class="parallax-img" src="images/vancouver-2.jpg" alt="" appParallax="0.2" />
+    <div class="wish__visual-text">
+      <app-icon name="lamp" [size]="48" [stroke]="1.2" />
+      <h1 class="h1">Rub the lamp.<br /><em class="aurora-text">Make a wish.</em></h1>
+      <p>Tell us your dream and a real human advisor will send you a personalised plan within 24 hours. Free, no strings attached.</p>
+      <ul>
+        <li><app-icon name="check" [size]="18" /> 30-min video call in Spanish, Portuguese or English</li>
+        <li><app-icon name="check" [size]="18" /> Program shortlist & budget estimate</li>
+        <li><app-icon name="check" [size]="18" /> Visa roadmap for your nationality</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="wish__panel">
+    @if (ticket(); as t) {
+      <div class="done">
+        <div class="done__burst" aria-hidden="true">
+          @for (i of [0, 1, 2, 3, 4, 5, 6, 7]; track i) { <span [style.--i]="i">✦</span> }
+          <app-icon name="sparkle" [size]="44" />
+        </div>
+        <h2 class="h2">Wish received, <em>{{ form.name.split(' ')[0] }}!</em></h2>
+        <p class="lead">Your wish ticket is <strong>{{ t }}</strong>. An advisor will write to <strong>{{ form.email }}</strong> within 24 hours.</p>
+        <p class="disclaimer">This is a mockup — nothing was sent or stored.</p>
+        <div class="done__ctas">
+          <a routerLink="/programs" class="btn btn--primary">Keep exploring <app-icon name="arrow" [size]="16" /></a>
+          <a routerLink="/" class="btn btn--ghost">Home</a>
+        </div>
+      </div>
+    } @else {
+      <div class="steps" aria-label="Form progress">
+        @for (s of ['You', 'Your dream', 'Details']; track s; let i = $index) {
+          <span class="steps__item" [class.is-on]="i <= step()"><i>{{ i + 1 }}</i>{{ s }}</span>
+        }
+      </div>
+
+      <form (ngSubmit)="step() === 2 ? submit() : next()" #f="ngForm">
+        @switch (step()) {
+          @case (0) {
+            <div class="pane">
+              <h2 class="h2">First, <em>who’s dreaming?</em></h2>
+              <div class="field"><label for="name">Full name</label><input id="name" class="input" name="name" [(ngModel)]="form.name" required autocomplete="name" placeholder="María Fernanda López" /></div>
+              <div class="field"><label for="email">Email</label><input id="email" class="input" type="email" name="email" [(ngModel)]="form.email" required autocomplete="email" placeholder="maria@email.com" /></div>
+              <div class="row">
+                <div class="field"><label for="country">Country</label><input id="country" class="input" name="country" [(ngModel)]="form.country" placeholder="Colombia" /></div>
+                <div class="field"><label for="age">Age</label><input id="age" class="input" type="number" min="14" max="80" name="age" [(ngModel)]="form.age" placeholder="22" /></div>
+              </div>
+            </div>
+          }
+          @case (1) {
+            <div class="pane">
+              <h2 class="h2">What’s <em>the dream?</em></h2>
+              <div class="field">
+                <label>Program</label>
+                <div class="opts">
+                  @for (p of data.programs; track p.id) {
+                    <label class="opt" [class.is-on]="form.programId === p.id">
+                      <input type="radio" name="program" [value]="p.id" [(ngModel)]="form.programId" />
+                      <strong>{{ p.title }}</strong><small>{{ p.duration }}</small>
+                    </label>
+                  }
+                </div>
+              </div>
+              <div class="field">
+                <label>Cities you’re curious about</label>
+                <div class="city-picks">
+                  @for (c of data.cities; track c.slug) {
+                    <button type="button" class="city-pick" [class.is-on]="form.cities.includes(c.slug)" (click)="toggleCity(c.slug)">
+                      <img [src]="c.images[0]" alt="" /><span>{{ c.name }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+          @case (2) {
+            <div class="pane">
+              <h2 class="h2">Almost <em>there.</em></h2>
+              <div class="row">
+                <div class="field">
+                  <label for="start">Ideal start</label>
+                  <select id="start" class="select" name="start" [(ngModel)]="form.start">
+                    @for (s of starts; track s) { <option>{{ s }}</option> }
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Total budget (CAD)</label>
+                  <div class="chips">
+                    @for (b of budgets; track b.v) {
+                      <button type="button" class="chip" [class.is-active]="form.budget === b.v" (click)="form.budget = b.v">{{ b.label }}</button>
+                    }
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label for="dream">Describe your dream in one sentence</label>
+                <textarea id="dream" class="textarea" name="dream" [(ngModel)]="form.dream" placeholder="I want to study design in Toronto and see Niagara Falls in winter…"></textarea>
+              </div>
+            </div>
+          }
+        }
+
+        <div class="actions">
+          @if (step() > 0) {
+            <button type="button" class="btn btn--ghost" (click)="step.set(step() - 1)">Back</button>
+          }
+          @if (step() < 2) {
+            <button type="submit" class="btn btn--primary" [disabled]="!canNext()">Continue <app-icon name="arrow" [size]="16" /></button>
+          } @else {
+            <button type="submit" class="btn btn--aurora" [disabled]="sending()">
+              {{ sending() ? 'Summoning your genie…' : 'Send my wish' }} <app-icon name="sparkle" [size]="16" />
+            </button>
+          }
+        </div>
+      </form>
+    }
+  </div>
+</section>

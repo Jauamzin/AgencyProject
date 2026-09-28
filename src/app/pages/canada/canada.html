@@ -1,0 +1,191 @@
+<app-page-hero image="images/flag.jpg" eyebrow="The country">
+  <h1 class="display">Oh,<br /><em>Canada.</em></h1>
+  <p class="hero-sub">Maple leaves, polite strangers, endless horizons — and one of the best places on Earth to study.</p>
+</app-page-hero>
+
+<!-- facts -->
+<section class="section">
+  <div class="container intro">
+    <div>
+      <span class="eyebrow" appReveal>Know before you go</span>
+      <h2 class="h2" appReveal="80">A country as big as a continent — <em>and as friendly as a small town.</em></h2>
+    </div>
+    <dl class="facts">
+      @for (f of facts; track f.k; let i = $index) {
+        <div [appReveal]="i * 60"><dt>{{ f.k }}</dt><dd>{{ f.v }}</dd></div>
+      }
+    </dl>
+  </div>
+</section>
+
+<!-- why -->
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Why Canada</span>
+        <h2 class="h2" appReveal="80">Six reasons dreamers <em>choose the North.</em></h2>
+      </div>
+    </div>
+    <div class="grid grid-3">
+      @for (r of reasons; track r.title; let i = $index) {
+        <article class="card reason" [appReveal]="(i % 3) * 100">
+          <div class="icon-badge"><app-icon [name]="r.icon" /></div>
+          <h3 class="h3">{{ r.title }}</h3>
+          <p class="muted">{{ r.text }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- seasons / weather -->
+<section class="section section--dark" id="weather">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Weather</span>
+        <h2 class="h2" appReveal="80">Four seasons, <em>no filter.</em></h2>
+      </div>
+      <p class="lead" appReveal="160">Yes, winters are cold — but Canadians have perfected the art of enjoying them. Here’s what each season feels like.</p>
+    </div>
+    <div class="seasons">
+      @for (s of seasons; track s.name; let i = $index) {
+        <article class="season parallax-frame" [appReveal]="i * 100">
+          <img class="parallax-img" [src]="s.img" [alt]="s.name + ' in Canada'" loading="lazy" appParallax="0.12" />
+          <div class="season__body">
+            <span class="season__months">{{ s.months }}</span>
+            <h3 class="h2">{{ s.name }}</h3>
+            <p>{{ s.text }}</p>
+            <span class="chip">{{ s.temp }}</span>
+          </div>
+        </article>
+      }
+    </div>
+    <div class="wx-compare" appReveal>
+      @for (c of data.cities; track c.slug) {
+        <a [routerLink]="['/cities', c.slug]" [fragment]="'weather'" class="wx-compare__item">
+          <strong>{{ c.name }}</strong>
+          <span><app-icon name="snow" [size]="16" /> Jan {{ c.weather[0].low }}° / {{ c.weather[0].high }}°</span>
+          <span><app-icon name="sun" [size]="16" /> Jul {{ c.weather[6].low }}° / {{ c.weather[6].high }}°</span>
+          <small>{{ c.weatherNote }}</small>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- culture -->
+<section class="section" id="culture">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Culture</span>
+        <h2 class="h2" appReveal="80">The unwritten <em>rules of the North.</em></h2>
+      </div>
+      <div class="tabs" appReveal="160">
+        <button type="button" class="chip" [class.is-active]="cultureTab() === 'codes'" (click)="cultureTab.set('codes')">Culture codes</button>
+        <button type="button" class="chip" [class.is-active]="cultureTab() === 'dos'" (click)="cultureTab.set('dos')">Do’s & don’ts</button>
+      </div>
+    </div>
+    @if (cultureTab() === 'codes') {
+      <div class="grid grid-3 culture">
+        @for (c of culture; track c.title) {
+          <article class="culture__item">
+            <app-icon [name]="c.icon" [size]="28" [stroke]="1.4" />
+            <h3 class="h3">{{ c.title }}</h3>
+            <p class="muted">{{ c.text }}</p>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="grid grid-2 dos">
+        <div class="card">
+          <h3 class="h3">Do ✓</h3>
+          <ul class="list-check">
+            @for (d of dos; track d) { <li><app-icon name="check" [size]="18" />{{ d }}</li> }
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="h3">Don’t ✕</h3>
+          <ul class="list-check list-x">
+            @for (d of donts; track d) { <li><app-icon name="close" [size]="18" />{{ d }}</li> }
+          </ul>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<app-parallax-band image="images/hero-lake.jpg" caption="Moraine Lake · Banff National Park">
+  48 national parks.<br /><em>One lifetime.</em>
+</app-parallax-band>
+
+<!-- cost & salaries -->
+<section class="section section--cream" id="cost">
+  <div class="container grid grid-2 money">
+    <div>
+      <span class="eyebrow" appReveal>Cost of living & salaries</span>
+      <h2 class="h2" appReveal="80">Earn in dollars, <em>live the dream.</em></h2>
+      <p class="lead" appReveal="160">
+        As a student you can typically cover a good part of your living costs with a part-time job.
+        Minimum wage is set by each province and rises every year with inflation.
+      </p>
+      <div class="table-wrap" appReveal="200">
+        <table class="table">
+          <thead><tr><th>Province</th><th>Hub</th><th class="num">Min. wage / h</th></tr></thead>
+          <tbody>
+            @for (p of provinces; track p.name) {
+              <tr><td>{{ p.name }}</td><td>{{ p.city }}</td><td class="num">{{ p.wage | currency: 'CAD' : 'symbol-narrow' }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="disclaimer">Approximate 2026 figures for this mockup. 20 h/week at $18/h ≈ $1,440/month before tax.</p>
+    </div>
+    <div class="card" appReveal="200">
+      <h3 class="h3 money__title">Monthly student budget by city</h3>
+      <app-cost-compare />
+    </div>
+  </div>
+</section>
+
+<!-- transport -->
+<section class="section" id="transport">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Public transport</span>
+        <h2 class="h2" appReveal="80">No car? <em>No problem.</em></h2>
+      </div>
+      <p class="lead" appReveal="160">Every Geenie city has excellent transit, and most students get a discounted pass bundled with their tuition.</p>
+    </div>
+    <div class="grid grid-3">
+      @for (c of data.cities; track c.slug; let i = $index) {
+        <a class="transit parallax-frame" [routerLink]="['/cities', c.slug]" fragment="transport" [appReveal]="i * 100">
+          <img class="parallax-img" [src]="c.transport.image" [alt]="'Public transport in ' + c.name" loading="lazy" appParallax="0.1" />
+          <div class="transit__body">
+            <span class="chip">{{ c.transport.card }}</span>
+            <h3 class="h3">{{ c.name }}</h3>
+            <p>{{ c.transport.lines[0].name }} · {{ c.transport.lines[1].name }} · {{ c.transport.lines[2].name }}</p>
+            <small>{{ c.transport.studentPass }}</small>
+          </div>
+        </a>
+      }
+    </div>
+    <div class="between" appReveal>
+      <app-icon name="train" [size]="28" [stroke]="1.4" />
+      <p><strong>Travelling between cities?</strong> VIA Rail links Toronto ↔ Ottawa in about 4.5 hours, and the Canadian train crosses the Rockies to Vancouver. For coast-to-coast trips, budget airlines make flights surprisingly affordable.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark next">
+  <div class="container next__inner">
+    <h2 class="h2" appReveal>Ready for the paperwork part? <em>We make it painless.</em></h2>
+    <div class="next__ctas" appReveal="120">
+      <a routerLink="/visas-funds" class="btn btn--light">Visas & funds <app-icon name="arrow" [size]="18" /></a>
+      <a routerLink="/programs" class="btn btn--glass">See programs</a>
+    </div>
+  </div>
+</section>

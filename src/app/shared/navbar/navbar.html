@@ -1,0 +1,35 @@
+<header class="nav" [class.is-scrolled]="scrolled() || open() || solid()" [class.menu-open]="open()">
+  <div class="nav__inner container">
+    <a routerLink="/" class="brand" aria-label="Geenie Travels home">
+      <span class="brand__mark"><app-icon name="sparkle" [size]="18" /></span>
+      <span class="brand__word">Geenie<em>travels</em></span>
+    </a>
+
+    <nav class="nav__links" [class.is-open]="open()" aria-label="Main">
+      <a routerLink="/canada" routerLinkActive="is-active">Canada</a>
+      <div class="dropdown" (mouseenter)="citiesOpen.set(true)" (mouseleave)="citiesOpen.set(false)">
+        <button class="dropdown__trigger" type="button" [attr.aria-expanded]="citiesOpen()" (click)="citiesOpen.set(!citiesOpen())">
+          Cities <span class="caret" [class.up]="citiesOpen()">▾</span>
+        </button>
+        <div class="dropdown__panel" [class.is-open]="citiesOpen()">
+          @for (c of cities; track c.slug) {
+            <a [routerLink]="['/cities', c.slug]" routerLinkActive="is-active" class="dropdown__item">
+              <img [src]="c.images[0]" [alt]="c.name" loading="lazy" />
+              <span>
+                <strong>{{ c.name }}</strong>
+                <small>{{ c.nickname }}</small>
+              </span>
+            </a>
+          }
+        </div>
+      </div>
+      <a routerLink="/programs" routerLinkActive="is-active">Programs</a>
+      <a routerLink="/visas-funds" routerLinkActive="is-active">Visas & Funds</a>
+      <a routerLink="/make-a-wish" class="btn btn--aurora nav__cta">Make a wish <app-icon name="sparkle" [size]="16" /></a>
+    </nav>
+
+    <button class="nav__burger" type="button" (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Toggle menu">
+      <app-icon [name]="open() ? 'close' : 'menu'" [size]="24" />
+    </button>
+  </div>
+</header>

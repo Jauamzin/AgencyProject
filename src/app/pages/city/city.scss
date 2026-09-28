@@ -1,0 +1,89 @@
+.hero-sub { font-size: clamp(18px, 2vw, 24px); max-width: 40ch; margin-top: 20px; }
+.hero-sub em { font-family: var(--font-display); }
+
+.stats { background: var(--city); color: #fff; }
+.stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stats__grid div { padding: 36px 24px; display: grid; gap: 4px; border-left: 1px solid rgba(255,255,255,.2); }
+.stats__grid div:first-child { border-left: 0; padding-left: 0; }
+.stats__grid strong { font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px); font-weight: 350; line-height: 1; }
+.stats__grid span { font-size: 14px; opacity: .85; }
+
+.about { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 7vw, 100px); align-items: center; }
+.about__text { display: grid; gap: 24px; }
+.label { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-family: var(--font-body); font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.hoods { display: grid; gap: 4px; }
+.hood { display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.hood app-icon { color: var(--maple); }
+.gallery { position: relative; height: clamp(440px, 50vw, 640px); }
+.gallery > div { position: absolute; border-radius: var(--radius); box-shadow: var(--shadow); }
+.gallery__a { inset: 0 20% 16% 0; }
+.gallery__b { width: 52%; height: 50%; right: 0; bottom: 0; border: 8px solid var(--paper); }
+
+.weather { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; }
+.weather .card:hover { transform: none; }
+.wx-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; }
+
+.total { display: grid; text-align: right; }
+.total span, .total small { color: var(--muted); font-size: 13px; }
+.total strong { font-family: var(--font-display); font-size: clamp(32px, 4vw, 48px); font-weight: 400; letter-spacing: -.02em; }
+.costs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; margin-bottom: 20px; }
+.cost { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.cost__main { display: grid; gap: 8px; }
+.cost__label { font-weight: 600; }
+.cost__bar { height: 6px; background: var(--cream); border-radius: 4px; overflow: hidden; }
+.cost__bar i { display: block; height: 100%; border-radius: 0 4px 4px 0; }
+.cost__value { font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.cost__value small { font-weight: 500; color: var(--muted); }
+
+.earn { display: grid; gap: 4px; margin-top: 24px; padding: 28px; border-radius: var(--radius); background: var(--ink); color: #fff; }
+.earn strong { font-family: var(--font-display); font-size: 56px; font-weight: 300; line-height: 1; }
+.earn span { color: var(--muted-light); }
+.salaries .card:hover { transform: none; }
+
+.stay { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); display: grid; }
+.stay__img { aspect-ratio: 16 / 11; }
+.stay__body { padding: 28px; display: grid; gap: 16px; }
+.stay__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.stay__price { font-weight: 800; font-variant-numeric: tabular-nums; }
+.stay__price small { font-weight: 500; color: var(--muted); }
+
+.transport { min-height: 100vh; display: flex; align-items: center; padding: 120px 0; }
+.transport::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(13,19,33,.55), transparent 70%); }
+.transport__card { max-width: 520px; padding: 44px; border-radius: 28px; background: rgba(255,253,249,.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); display: grid; gap: 20px; }
+.transport__pass { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.transport__pass div { padding: 16px; border-radius: 14px; background: var(--cream); display: grid; }
+.transport__pass small { color: var(--muted); font-size: 12px; }
+.transport__pass strong { font-size: 22px; }
+.transport__student { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.transport__student app-icon { margin-top: 3px; color: var(--vancouver); }
+.transport__lines { list-style: none; margin: 0; padding: 0; display: grid; }
+.transport__lines li { display: grid; gap: 2px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.transport__lines span { color: var(--muted); }
+
+.culture { gap: 72px; }
+.vibes { list-style: none; padding: 0; margin: 32px 0 0; display: grid; }
+.vibes li { display: grid; grid-template-columns: 48px 1fr; padding: 22px 0; border-bottom: 1px solid var(--line); font-family: var(--font-display); font-size: 22px; line-height: 1.3; }
+.vibes li span { font-size: 14px; font-family: var(--font-body); color: var(--muted); padding-top: 6px; }
+.schools { display: grid; gap: 12px; }
+.school { display: grid; gap: 6px; justify-items: start; padding: 22px 24px; border-radius: 18px; background: var(--cream); }
+.school strong { font-size: 18px; }
+
+.prog { display: grid; gap: 14px; justify-items: start; align-content: start; }
+.prog__meta { font-size: 14px; }
+
+.others { display: grid; grid-template-columns: 1fr 1fr; }
+.other { min-height: 58vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px; color: #fff; }
+.other::after { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(13,19,33,.45); transition: background .5s; }
+.other:hover::after { background: rgba(13,19,33,.25); }
+.other__label { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; opacity: .8; }
+.other strong { display: flex; align-items: center; gap: 16px; }
+.other app-icon { transition: transform .5s var(--ease); }
+.other:hover app-icon { transform: translateX(10px); }
+
+@media (max-width: 900px) {
+  .stats__grid { grid-template-columns: 1fr 1fr; }
+  .stats__grid div:nth-child(3) { border-left: 0; padding-left: 0; }
+  .about, .weather, .costs, .others { grid-template-columns: 1fr; }
+  .total { text-align: left; }
+  .transport__card { padding: 28px; }
+}

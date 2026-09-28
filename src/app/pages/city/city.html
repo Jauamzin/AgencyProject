@@ -1,0 +1,229 @@
+@if (city(); as c) {
+  <app-page-hero [image]="c.images[0]" [eyebrow]="c.province + ', Canada'">
+    <h1 class="display">{{ c.name }}</h1>
+    <p class="hero-sub"><em>{{ c.nickname }}.</em> {{ c.tagline }}</p>
+  </app-page-hero>
+
+  <!-- stats bar -->
+  <section class="stats" [style.--city]="c.color">
+    <div class="container stats__grid">
+      @for (s of c.stats; track s.label; let i = $index) {
+        <div [appReveal]="i * 80"><strong>{{ s.value }}</strong><span>{{ s.label }}</span></div>
+      }
+    </div>
+  </section>
+
+  <!-- intro + gallery -->
+  <section class="section">
+    <div class="container about">
+      <div class="about__text">
+        <span class="eyebrow" appReveal>The city</span>
+        <h2 class="h2" appReveal="80">Life in <em>{{ c.name }}</em></h2>
+        <p class="lead" appReveal="160">{{ c.intro }}</p>
+        <div class="hoods" appReveal="220">
+          <h3 class="label">Student-favourite neighbourhoods</h3>
+          @for (n of c.neighborhoods; track n.name) {
+            <div class="hood"><app-icon name="pin" [size]="18" /><strong>{{ n.name }}</strong><span class="muted">{{ n.why }}</span></div>
+          }
+        </div>
+      </div>
+      <div class="gallery" aria-hidden="true">
+        <div class="gallery__a parallax-frame"><img class="parallax-img" [src]="c.images[1]" alt="" loading="lazy" appParallax="0.15" /></div>
+        <div class="gallery__b parallax-frame" appParallax="-0.1"><img class="parallax-img" [src]="c.images[2]" alt="" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- weather -->
+  <section class="section section--dark" id="weather">
+    <div class="container weather">
+      <div>
+        <span class="eyebrow" appReveal>Weather</span>
+        <h2 class="h2" appReveal="80">What to <em>pack.</em></h2>
+        <p class="lead" appReveal="160">{{ c.weatherNote }}</p>
+        <div class="wx-pills" appReveal="200">
+          <span class="chip"><app-icon name="snow" [size]="16" /> Coldest: {{ c.weather[0].low }}°C</span>
+          <span class="chip"><app-icon name="sun" [size]="16" /> Warmest: {{ c.weather[6].high }}°C</span>
+        </div>
+      </div>
+      <div class="card" appReveal="120">
+        <app-weather-chart [data]="c.weather" [city]="c.name" />
+      </div>
+    </div>
+  </section>
+
+  <!-- cost of living -->
+  <section class="section" id="cost">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" appReveal>Cost of living</span>
+          <h2 class="h2" appReveal="80">Your monthly <em>budget.</em></h2>
+        </div>
+        <div class="total" appReveal="160">
+          <span>Estimated total</span>
+          <strong>{{ totals().min | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }} – {{ totals().max | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong>
+          <small>per month, CAD</small>
+        </div>
+      </div>
+      <div class="costs">
+        @for (item of c.costs; track item.label; let i = $index) {
+          <div class="cost" [appReveal]="i * 60">
+            <div class="icon-badge"><app-icon [name]="item.icon" /></div>
+            <div class="cost__main">
+              <span class="cost__label">{{ item.label }}</span>
+              <span class="cost__bar"><i [style.width.%]="share(item.max)" [style.background]="c.color"></i></span>
+            </div>
+            <span class="cost__value">
+              {{ item.min | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}@if (item.max !== item.min) {<small> – {{ item.max | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</small>}
+            </span>
+          </div>
+        }
+      </div>
+      <p class="disclaimer">Illustrative student-lifestyle figures (2026 mockup). Tuition not included.</p>
+    </div>
+  </section>
+
+  <!-- salaries -->
+  <section class="section section--cream" id="salaries">
+    <div class="container grid grid-2 salaries">
+      <div>
+        <span class="eyebrow" appReveal>Salaries & part-time work</span>
+        <h2 class="h2" appReveal="80">Work while <em>you study.</em></h2>
+        <p class="lead" appReveal="160">Minimum wage in {{ c.province }} is about <strong>{{ c.minimumWage | currency: 'CAD' : 'symbol-narrow' }}/h</strong>. Working 20 hours a week that’s roughly:</p>
+        <div class="earn" appReveal="220">
+          <strong>{{ partTime() | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong>
+          <span>/ month before tax — covers about {{ (partTime() / totals().min) * 100 | number: '1.0-0' }}% of a frugal monthly budget</span>
+        </div>
+      </div>
+      <div class="card" appReveal="120">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Typical job</th><th class="num">$/hour</th></tr></thead>
+            <tbody>
+              @for (s of c.salaries; track s.role) {
+                <tr><td><strong>{{ s.role }}</strong><br /><small class="muted">{{ s.note }}</small></td><td class="num">{{ s.hourly | currency: 'CAD' : 'symbol-narrow' }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- accommodation -->
+  <section class="section" id="accommodation">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" appReveal>Accommodation</span>
+          <h2 class="h2" appReveal="80">A place to call <em>home.</em></h2>
+        </div>
+        <p class="lead" appReveal="160">Most Geenie students start in a homestay for the first months, then move into a shared flat with friends they made in class.</p>
+      </div>
+      <div class="grid grid-3">
+        @for (a of c.accommodation; track a.type; let i = $index) {
+          <article class="stay" [appReveal]="i * 100">
+            <div class="stay__img parallax-frame"><img class="parallax-img" [src]="a.image" [alt]="a.type" loading="lazy" appParallax="0.08" /></div>
+            <div class="stay__body">
+              <div class="stay__head">
+                <h3 class="h3">{{ a.type }}</h3>
+                <span class="stay__price">{{ a.monthly[0] | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}–{{ a.monthly[1] | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}<small>/mo</small></span>
+              </div>
+              <p class="muted">{{ a.vibe }}</p>
+              <ul class="list-check">
+                @for (p of a.perks; track p) { <li><app-icon name="check" [size]="16" />{{ p }}</li> }
+              </ul>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- transport -->
+  <section class="transport parallax-frame" id="transport">
+    <img class="parallax-img" [src]="c.transport.image" alt="" loading="lazy" appParallax="0.25" />
+    <div class="container transport__inner">
+      <div class="transport__card" appReveal>
+        <span class="eyebrow">Public transport</span>
+        <h2 class="h2">Getting <em>around.</em></h2>
+        <div class="transport__pass">
+          <div><small>Pay with</small><strong>{{ c.transport.card }}</strong></div>
+          <div><small>Adult monthly</small><strong>{{ c.transport.monthly | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></div>
+        </div>
+        <p class="transport__student"><app-icon name="cap" [size]="18" /> {{ c.transport.studentPass }}</p>
+        <ul class="transport__lines">
+          @for (l of c.transport.lines; track l.name) {
+            <li><strong>{{ l.name }}</strong><span>{{ l.detail }}</span></li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- culture + institutions -->
+  <section class="section">
+    <div class="container grid grid-2 culture">
+      <div>
+        <span class="eyebrow" appReveal>Culture & vibe</span>
+        <h2 class="h2" appReveal="80">The <em>{{ c.name }}</em> way of life.</h2>
+        <ul class="vibes">
+          @for (v of c.culture; track v; let i = $index) {
+            <li [appReveal]="i * 80"><span>0{{ i + 1 }}</span>{{ v }}</li>
+          }
+        </ul>
+      </div>
+      <div>
+        <span class="eyebrow" appReveal>Where you could study</span>
+        <div class="schools">
+          @for (s of c.institutions; track s.name; let i = $index) {
+            <div class="school" [appReveal]="i * 80">
+              <span class="chip">{{ s.kind }}</span>
+              <strong>{{ s.name }}</strong>
+              <span class="muted">{{ s.highlight }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-parallax-band [image]="c.images[2]" [caption]="c.name + ', ' + c.province" height="64vh">
+    {{ c.tagline }}
+  </app-parallax-band>
+
+  <!-- programs in city -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" appReveal>Programs in {{ c.name }}</span>
+          <h2 class="h2" appReveal="80">Start your <em>{{ c.name }}</em> chapter.</h2>
+        </div>
+        <a routerLink="/programs" [queryParams]="{ city: c.slug }" class="btn btn--primary" appReveal="160">All programs here <app-icon name="arrow" [size]="18" /></a>
+      </div>
+      <div class="grid grid-3">
+        @for (p of programs(); track p.id; let i = $index) {
+          <a routerLink="/programs" [fragment]="p.id" class="card prog" [appReveal]="i * 100">
+            <span class="chip">{{ p.category }}</span>
+            <h3 class="h3">{{ p.title }}</h3>
+            <p class="muted">{{ p.summary }}</p>
+            <span class="prog__meta">{{ p.duration }} · from <strong>{{ p.fromPrice | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- other cities -->
+  <section class="others">
+    @for (o of others(); track o.slug) {
+      <a [routerLink]="['/cities', o.slug]" class="other parallax-frame">
+        <img class="parallax-img" [src]="o.images[0]" [alt]="o.name" loading="lazy" appParallax="0.15" />
+        <span class="other__label">Next city</span>
+        <strong class="h1">{{ o.name }} <app-icon name="arrow" [size]="36" [stroke]="1.2" /></strong>
+      </a>
+    }
+  </section>
+}

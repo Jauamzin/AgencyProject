@@ -1,0 +1,49 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <h2 class="footer__big">Dream <em class="aurora-text">abroad.</em></h2>
+      <form class="newsletter" (ngSubmit)="subscribe()">
+        <p class="newsletter__label">Monthly postcards from Canada — scholarships, deadlines & stories.</p>
+        @if (!subscribed()) {
+          <div class="newsletter__row">
+            <input class="input" type="email" name="email" placeholder="you@email.com" [(ngModel)]="email" required aria-label="Email" />
+            <button class="btn btn--light" type="submit">Subscribe <app-icon name="arrow" [size]="16" /></button>
+          </div>
+        } @else {
+          <p class="newsletter__ok"><app-icon name="check" /> You’re on the list! (mockup — nothing was stored)</p>
+        }
+      </form>
+    </div>
+
+    <div class="footer__cols">
+      <div>
+        <h4>Explore</h4>
+        <a routerLink="/canada">Canada guide</a>
+        <a routerLink="/programs">Programs</a>
+        <a routerLink="/visas-funds">Visas & Funds</a>
+        <a routerLink="/make-a-wish">Free consultation</a>
+      </div>
+      <div>
+        <h4>Cities</h4>
+        @for (c of cities; track c.slug) {
+          <a [routerLink]="['/cities', c.slug]">{{ c.name }}</a>
+        }
+      </div>
+      <div>
+        <h4>Say hi</h4>
+        <span>hola&#64;geenietravels.example</span>
+        <span>+1 (604) 555-0199</span>
+        <span>Mon–Fri · 9:00–18:00 PT</span>
+      </div>
+      <div class="footer__note">
+        <p>Geenie Travels is a demo website. All programs, prices and testimonials are mockup data for illustration — always verify immigration details on official Government of Canada sources.</p>
+        <p class="credits">Photos: Unsplash & Wikimedia Commons contributors.</p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {{ year }} Geenie Travels</span>
+      <span>Made with ✨ and maple syrup</span>
+    </div>
+  </div>
+</footer>

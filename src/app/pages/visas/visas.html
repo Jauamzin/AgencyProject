@@ -1,0 +1,161 @@
+<app-page-hero image="images/travel-map.jpg" eyebrow="Visas & funds" height="80vh">
+  <h1 class="display">Paperwork,<br /><em>made magic.</em></h1>
+  <p class="hero-sub">Study permits, working holidays, proof of funds — explained like a friend would.</p>
+</app-page-hero>
+
+<!-- visa types -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Types of visa</span>
+        <h2 class="h2" appReveal="80">Four doors <em>into Canada.</em></h2>
+      </div>
+      <p class="lead" appReveal="160">Which one you need depends on how long you’ll stay, what you’ll do, and your age. Here’s the short version.</p>
+    </div>
+    <div class="visas">
+      @for (v of data.visas; track v.code; let i = $index) {
+        <article class="visa" [style.--accent]="v.accent" [appReveal]="i * 90">
+          <span class="visa__code">{{ v.code }}</span>
+          <h3 class="h3">{{ v.name }}</h3>
+          <p class="muted">{{ v.forWho }}</p>
+          <dl>
+            <div><dt>Duration</dt><dd>{{ v.duration }}</dd></div>
+            <div><dt>Work</dt><dd>{{ v.work }}</dd></div>
+            <div><dt>Gov. fee</dt><dd>{{ v.fee }}</dd></div>
+          </dl>
+          <ul class="list-check">
+            @for (d of v.keyDocs; track d) { <li><app-icon name="document" [size]="16" />{{ d }}</li> }
+          </ul>
+        </article>
+      }
+    </div>
+    <p class="disclaimer">*Most undergraduate and college students need a provincial attestation letter; many graduate students are exempt. Fees in CAD, illustrative — always confirm on the official IRCC website.</p>
+  </div>
+</section>
+
+<!-- finder -->
+<section class="section section--dark finder">
+  <div class="container finder__grid">
+    <div>
+      <span class="eyebrow" appReveal>Visa finder</span>
+      <h2 class="h2" appReveal="80">Three questions. <em>One answer.</em></h2>
+      <p class="lead" appReveal="160">Our little genie will point you to the right visa in under 10 seconds.</p>
+      <div class="finder__progress" appReveal="200">
+        @for (s of steps; track s.q; let i = $index) {
+          <span [class.is-done]="i < stepIndex()"></span>
+        }
+      </div>
+    </div>
+
+    <div class="finder__panel">
+      @if (result(); as r) {
+        <div class="finder__result" [style.--accent]="r.visa.accent">
+          <span class="eyebrow">Your match ✨</span>
+          <span class="visa__code">{{ r.visa.code }}</span>
+          <h3 class="h2">{{ r.visa.name }}</h3>
+          <p>{{ r.note }}</p>
+          <div class="finder__actions">
+            <a routerLink="/make-a-wish" class="btn btn--aurora">Help me apply <app-icon name="arrow" [size]="16" /></a>
+            <button type="button" class="btn btn--glass" (click)="resetFinder()">Start over</button>
+          </div>
+        </div>
+      } @else {
+        @let s = steps[stepIndex()];
+        <div class="finder__step">
+          <span class="finder__n">Question {{ stepIndex() + 1 }} / {{ steps.length }}</span>
+          <h3 class="h3">{{ s.q }}</h3>
+          <div class="finder__options">
+            @for (o of s.options; track o.value) {
+              <button type="button" class="finder__opt" (click)="answer(o.value)">{{ o.label }} <app-icon name="arrow" [size]="18" /></button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- funds -->
+<section class="section" id="funds">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Funds</span>
+        <h2 class="h2" appReveal="80">Show the money, <em>stress-free.</em></h2>
+      </div>
+      <p class="lead" appReveal="160">For a study permit, you must prove you can cover your first year: tuition, living costs and travel. Here’s a typical example for one student.</p>
+    </div>
+
+    <div class="funds">
+      <div class="funds__calc card" appReveal>
+        <div class="funds__row"><span>Living costs (single applicant, set by IRCC)</span><strong>{{ data.proofOfFunds | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></div>
+        <div class="funds__row"><span>First-year tuition (example)</span><strong>{{ tuitionYear | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></div>
+        <div class="funds__row"><span>Return travel (estimate)</span><strong>{{ travel | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></div>
+        <div class="funds__row funds__total"><span>Total to show</span><strong>{{ fundsTotal() | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></div>
+        <div class="stack" aria-hidden="true">
+          <span [style.flex]="data.proofOfFunds" style="background: var(--ottawa)"></span>
+          <span [style.flex]="tuitionYear" style="background: var(--ink)"></span>
+          <span [style.flex]="travel" style="background: var(--gold)"></span>
+        </div>
+        <p class="disclaimer">The living-cost amount is updated yearly and increases with each family member. Illustrative figures.</p>
+      </div>
+      <div class="grid funds__ways">
+        @for (w of fundWays; track w.title; let i = $index) {
+          <div class="way" [appReveal]="i * 80">
+            <div class="icon-badge"><app-icon [name]="w.icon" /></div>
+            <div>
+              <h3 class="h3">{{ w.title }}</h3>
+              <p class="muted">{{ w.text }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-parallax-band image="images/plane.jpg" caption="Boarding soon">
+  Visa approved.<br /><em>Now pack your dreams.</em>
+</app-parallax-band>
+
+<!-- checklist + timeline -->
+<section class="section section--cream">
+  <div class="container grid grid-2 prep">
+    <div class="card checklist" appReveal>
+      <div class="checklist__head">
+        <h3 class="h3">Your document checklist</h3>
+        <span class="checklist__pct">{{ progress() }}%</span>
+      </div>
+      <div class="checklist__bar"><i [style.width.%]="progress()"></i></div>
+      <ul>
+        @for (item of checklist; track item; let i = $index) {
+          <li>
+            <label [class.is-done]="checked().has(i)">
+              <input type="checkbox" [checked]="checked().has(i)" (change)="toggle(i)" />
+              <span class="box"><app-icon name="check" [size]="14" [stroke]="3" /></span>
+              {{ item }}
+            </label>
+          </li>
+        }
+      </ul>
+      @if (progress() === 100) {
+        <p class="checklist__done">✨ All set! Your genie is proud of you.</p>
+      }
+    </div>
+
+    <div>
+      <span class="eyebrow" appReveal>Timeline</span>
+      <h2 class="h2" appReveal="80">When to do <em>what.</em></h2>
+      <ol class="timeline">
+        @for (t of timeline; track t.when; let i = $index) {
+          <li [appReveal]="i * 90">
+            <span class="timeline__dot"></span>
+            <strong>{{ t.when }}</strong>
+            <span class="muted">{{ t.what }}</span>
+          </li>
+        }
+      </ol>
+    </div>
+  </div>
+</section>

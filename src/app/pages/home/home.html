@@ -1,0 +1,247 @@
+<!-- ============ HERO: layered parallax ============ -->
+<section class="hero">
+  <div class="hero__layer hero__bg">
+    <img src="images/hero-lake.jpg" alt="Moraine Lake in the Canadian Rockies" appParallax="-0.35" [scale]="1.12" />
+  </div>
+  <div class="hero__glow" aria-hidden="true"></div>
+
+  <div class="hero__content container">
+    <span class="eyebrow hero__eyebrow">Geenie Travels · Intercambio agency</span>
+    <h1 class="display hero__title" appParallax="-0.12">
+      Dream<br />
+      <em>abroad.</em>
+    </h1>
+    <p class="hero__sub">
+      Your wish to
+      <span class="rotator" aria-live="polite">
+        @for (w of words; track w; let i = $index) {
+          <span class="rotator__word" [class.is-on]="i === wordIndex()">{{ w }}</span>
+        }
+      </span>
+      in <strong>Canada</strong> starts here.
+    </p>
+    <div class="hero__ctas">
+      <a routerLink="/programs" class="btn btn--light">Explore programs <app-icon name="arrow" [size]="18" /></a>
+      <a routerLink="/make-a-wish" class="btn btn--glass">Book a free call</a>
+    </div>
+  </div>
+
+  <aside class="wish-card" appParallax="0.18">
+    <span class="wish-card__label"><app-icon name="sparkle" [size]="14" /> Wish of the week</span>
+    <strong>A semester at UBC</strong>
+    <span class="muted-l">Vancouver · Sep intake · from {{ 9800 | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</span>
+  </aside>
+
+  <svg class="hero__mountains" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true" appParallax="0.08">
+    <path d="M0 220V150l120-60 90 40 140-100 120 90 80-40 160 110 130-70 110 50 150-120 130 90 90-30 120 70v110z" fill="rgba(255,253,249,.35)" />
+    <path d="M0 220v-40l160-50 110 40 170-80 140 70 120-30 180 70 150-60 140 40 130-50 140 50v80z" fill="var(--paper)" />
+  </svg>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee strip" aria-hidden="true">
+  <div class="marquee__track">
+    @for (n of [0, 1]; track n) {
+      <span>Vancouver</span><i>✦</i><span><em>Toronto</em></span><i>✦</i><span>Ottawa</span><i>✦</i>
+      <span><em>Study</em></span><i>✦</i><span>Exchange</span><i>✦</i><span><em>Work &amp; Travel</em></span><i>✦</i>
+    }
+  </div>
+</div>
+
+<!-- ============ MANIFESTO + collage ============ -->
+<section class="section manifesto">
+  <div class="container manifesto__grid">
+    <div class="manifesto__text">
+      <span class="eyebrow" appReveal>Our philosophy</span>
+      <h2 class="h1" appReveal="100">Every great story<br />starts with a <em class="aurora-text">wish.</em></h2>
+      <p class="lead" appReveal="200">
+        We’re Geenie — a small team of former exchange students who once packed two suitcases and a lot of fear.
+        Today we help dreamers from all over Latin America and the world rub the lamp and land in Canada — with a plan,
+        a budget, and a friend waiting at the airport.
+      </p>
+      <a routerLink="/canada" class="btn btn--primary" appReveal="300">Why Canada? <app-icon name="arrow" [size]="18" /></a>
+    </div>
+    <div class="collage" aria-hidden="true">
+      <div class="collage__a parallax-frame"><img class="parallax-img" src="images/students-1.jpg" alt="" loading="lazy" appParallax="0.12" /></div>
+      <div class="collage__b parallax-frame" appParallax="-0.12"><img class="parallax-img" src="images/maple.jpg" alt="" loading="lazy" /></div>
+      <div class="collage__c parallax-frame" appParallax="0.08"><img class="parallax-img" src="images/plane.jpg" alt="" loading="lazy" /></div>
+      <div class="collage__stamp" appParallax="-0.2">
+        <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs>
+          <text><textPath href="#circ">DREAM · STUDY · EXPLORE · BELONG · </textPath></text></svg>
+        <app-icon name="maple" [size]="28" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THREE WISHES ============ -->
+<section class="section section--cream wishes">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>The three wishes</span>
+        <h2 class="h2" appReveal="80">Canada grants <em>all three.</em></h2>
+      </div>
+      <p class="lead" appReveal="160">Most genies give you three wishes. We think a year in Canada covers them in one go.</p>
+    </div>
+    <div class="grid grid-3">
+      @for (w of wishes; track w.title; let i = $index) {
+        <article class="card wish" [appReveal]="i * 120">
+          <span class="wish__num">{{ w.num }}</span>
+          <div class="icon-badge"><app-icon [name]="w.icon" /></div>
+          <h3 class="h3">{{ w.title }}</h3>
+          <p class="muted">{{ w.text }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ CANADA AT A GLANCE ============ -->
+<section class="section section--dark glance">
+  <div class="glance__aurora" aria-hidden="true" appParallax="0.2"></div>
+  <div class="container">
+    <span class="eyebrow" appReveal>Canada at a glance</span>
+    <h2 class="h2 glance__title" appReveal="80">The second-largest country on Earth, <em>with room for you.</em></h2>
+    <div class="glance__stats">
+      <div appReveal="0"><strong [appCountUp]="41" suffix="M"></strong><span>people, coast to coast to coast</span></div>
+      <div appReveal="100"><strong [appCountUp]="2"></strong><span>official languages — English & French</span></div>
+      <div appReveal="200"><strong [appCountUp]="450" suffix="+"></strong><span>ethnic & cultural origins reported</span></div>
+      <div appReveal="300"><strong [appCountUp]="24" suffix="h"></strong><span>weekly off-campus work allowed for students</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CITIES ============ -->
+<section class="section cities">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>Three cities, three personalities</span>
+        <h2 class="h2" appReveal="80">Where will your <em>story</em> unfold?</h2>
+      </div>
+      <p class="lead" appReveal="160">Ocean breeze, big-city buzz, or a bilingual capital. Scroll through and find your match.</p>
+    </div>
+
+    @for (c of data.cities; track c.slug; let odd = $odd) {
+      <article class="city" [class.city--flip]="odd">
+        <a class="city__media parallax-frame" [routerLink]="['/cities', c.slug]" [attr.aria-label]="'Discover ' + c.name">
+          <img class="parallax-img" [src]="c.images[0]" [alt]="c.name + ' skyline'" loading="lazy" appParallax="0.18" />
+          <span class="city__tag" [style.background]="c.color">{{ c.province }}</span>
+        </a>
+        <div class="city__body" appReveal>
+          <span class="city__index">0{{ $index + 1 }}</span>
+          <h3 class="h1">{{ c.name }}</h3>
+          <p class="city__nick"><em>{{ c.nickname }}</em></p>
+          <p class="muted">{{ c.intro }}</p>
+          <dl class="city__facts">
+            <div><dt>Living costs</dt><dd>from {{ totalMin(c.slug) | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}/mo</dd></div>
+            <div><dt>Min. wage</dt><dd>{{ c.minimumWage | currency: 'CAD' : 'symbol-narrow' }}/h</dd></div>
+            <div><dt>Summer high</dt><dd>{{ c.weather[6].high }}°C</dd></div>
+            <div><dt>Winter low</dt><dd>{{ c.weather[0].low }}°C</dd></div>
+          </dl>
+          <a [routerLink]="['/cities', c.slug]" class="btn btn--ghost">Discover {{ c.name }} <app-icon name="arrow" [size]="18" /></a>
+        </div>
+      </article>
+    }
+  </div>
+</section>
+
+<app-parallax-band image="images/niagara.jpg" caption="Niagara Falls · 90 minutes from Toronto">
+  The world is wide.<br /><em>Go see it.</em>
+</app-parallax-band>
+
+<!-- ============ PROGRAMS PREVIEW ============ -->
+<section class="section programs-preview">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>University & exchange programs</span>
+        <h2 class="h2" appReveal="80">Pick your <em>path.</em></h2>
+      </div>
+      <a routerLink="/programs" class="btn btn--primary" appReveal="160">All programs <app-icon name="arrow" [size]="18" /></a>
+    </div>
+    <div class="pp">
+      @for (p of data.programs.slice(0, 4); track p.id; let i = $index) {
+        <a routerLink="/programs" [fragment]="p.id" class="pp__card" [appReveal]="i * 100">
+          <div class="pp__img parallax-frame"><img class="parallax-img" [src]="p.image" [alt]="p.title" loading="lazy" appParallax="0.1" /></div>
+          <div class="pp__body">
+            <span class="chip">{{ p.category }}</span>
+            <h3 class="h3">{{ p.title }}</h3>
+            <p class="muted">{{ p.duration }} · from <strong>{{ p.fromPrice | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</strong></p>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ COST COMPARE ============ -->
+<section class="section section--cream">
+  <div class="container grid grid-2 compare">
+    <div>
+      <span class="eyebrow" appReveal>Cost of living</span>
+      <h2 class="h2" appReveal="80">What does a month <em>really</em> cost?</h2>
+      <p class="lead" appReveal="160">Rent, groceries, transit, phone and a little fun. Compare our three cities side by side — tap a bar to dive into the details.</p>
+    </div>
+    <div class="card" appReveal="200">
+      <app-cost-compare />
+    </div>
+  </div>
+</section>
+
+<!-- ============ JOURNEY ============ -->
+<section class="section journey">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow" appReveal>How the magic works</span>
+        <h2 class="h2" appReveal="80">From wish to <em>welcome</em> in six steps.</h2>
+      </div>
+    </div>
+    <ol class="journey__list">
+      @for (s of journey; track s.title; let i = $index) {
+        <li [appReveal]="i * 90">
+          <span class="journey__n">{{ i + 1 }}</span>
+          <app-icon [name]="s.icon" [size]="26" />
+          <h3 class="h3">{{ s.title }}</h3>
+          <p class="muted">{{ s.text }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section section--dark voices">
+  <div class="container">
+    <span class="eyebrow">Wishes granted</span>
+    <div class="voices__stage">
+      @for (t of data.testimonials; track t.name; let i = $index) {
+        <figure class="voice" [class.is-on]="i === activeTestimonial()">
+          <blockquote>“{{ t.quote }}”</blockquote>
+          <figcaption>
+            <span class="voice__avatar">{{ t.initials }}</span>
+            <span><strong>{{ t.name }}</strong><br /><span class="muted">{{ t.from }} → {{ data.cityName(t.city) }} · {{ t.program }}</span></span>
+          </figcaption>
+        </figure>
+      }
+    </div>
+    <div class="voices__dots">
+      @for (t of data.testimonials; track t.name; let i = $index) {
+        <button type="button" [class.is-on]="i === activeTestimonial()" (click)="activeTestimonial.set(i)" [attr.aria-label]="'Show story from ' + t.name"></button>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="cta parallax-frame">
+  <img class="parallax-img" src="images/dream-stars.jpg" alt="" loading="lazy" appParallax="0.3" />
+  <div class="container cta__inner" appReveal>
+    <app-icon name="lamp" [size]="54" [stroke]="1.2" />
+    <h2 class="display">Your wish is<br /><em class="aurora-text">our command.</em></h2>
+    <p class="lead">Tell us your dream in 2 minutes. We’ll come back with a personalised plan within 24 hours — free.</p>
+    <a routerLink="/make-a-wish" class="btn btn--aurora">Make a wish <app-icon name="sparkle" [size]="18" /></a>
+  </div>
+</section>
